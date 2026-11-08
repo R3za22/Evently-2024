@@ -1,17 +1,20 @@
 "use server"
 
-import { CreateCategoryParams } from "@/types"
-import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import Category from "../database/models/category.model"
+import { requireUserId } from "../server/session"
+import { handleError } from "../utils"
+import { escapeRegex } from "../validation"
 
-export const createCategory = async ({ categoryName }: CreateCategoryParams) => {
+export const createCategory = async ({ categoryName }: { categoryName: string }) => {
   try {
-    await connectToDatabase();
-
-    const newCategory = await Category.create({ name: categoryName });
-
-    return JSON.parse(JSON.stringify(newCategory));
+    await requireUserId()
+    const name = String(categoryName ?? "").trim()
+    if (name.length < 2 || name.length > 40) throw new Error("Category name must be 2-40 characters.")
+    await connectToDatabase()
+    const existing = await Category.findOne({ name: { $regex: `^${escapeRegex(name)}$`, $options: "i" } })
+    const category = existing ?? (await Category.create({ name }))
+    return JSON.parse(JSON.stringify(category))
   } catch (error) {
     handleError(error)
   }
@@ -19,11 +22,8 @@ export const createCategory = async ({ categoryName }: CreateCategoryParams) => 
 
 export const getAllCategories = async () => {
   try {
-    await connectToDatabase();
-
-    const categories = await Category.find();
-
-    return JSON.parse(JSON.stringify(categories));
+    await connectToDatabase()
+    return JSON.parse(JSON.stringify(await Category.find().sort({ name: 1 })))
   } catch (error) {
     handleError(error)
   }

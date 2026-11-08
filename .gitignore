@@ -34,3 +34,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# demo build
+/dist-demo
+/.demo-aside
+/test-results
+/playwright-report
+.env

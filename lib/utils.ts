@@ -1,105 +1,46 @@
 import { type ClassValue, clsx } from "clsx";
-
 import { twMerge } from "tailwind-merge";
-import qs from "query-string";
+export { escapeRegex } from "@/lib/validation";
 
-import { UrlQueryParams, RemoveUrlQueryParams } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatDateTime = (dateString: Date) => {
-  const dateTimeOptions: Intl.DateTimeFormatOptions = {
-    weekday: "short", // abbreviated weekday name (e.g., 'Mon')
-    month: "short", // abbreviated month name (e.g., 'Oct')
-    day: "numeric", // numeric day of the month (e.g., '25')
-    hour: "numeric", // numeric hour (e.g., '8')
-    minute: "numeric", // numeric minute (e.g., '30')
-    hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
-  };
+export type Locale = "en" | "fa";
 
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    weekday: "short", // abbreviated weekday name (e.g., 'Mon')
-    month: "short", // abbreviated month name (e.g., 'Oct')
-    year: "numeric", // numeric year (e.g., '2023')
-    day: "numeric", // numeric day of the month (e.g., '25')
-  };
+/** Prefix for root-absolute public assets when the app is served under a base path (static demo). */
+export const withBase = (src: string) =>
+  src.startsWith("/") && !src.startsWith("//") ? `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${src}` : src;
 
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "numeric", // numeric hour (e.g., '8')
-    minute: "numeric", // numeric minute (e.g., '30')
-    hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
-  };
-
-  const formattedDateTime: string = new Date(dateString).toLocaleString(
-    "en-US",
-    dateTimeOptions
-  );
-
-  const formattedDate: string = new Date(dateString).toLocaleString(
-    "en-US",
-    dateOptions
-  );
-
-  const formattedTime: string = new Date(dateString).toLocaleString(
-    "en-US",
-    timeOptions
-  );
-
-  return {
-    dateTime: formattedDateTime,
-    dateOnly: formattedDate,
-    timeOnly: formattedTime,
-  };
-};
-
-export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
-
-export const formatPrice = (price: string) => {
-  const amount = parseFloat(price);
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
-
-  return formattedPrice;
-};
-
-export function formUrlQuery({ params, key, value }: UrlQueryParams) {
-  const currentUrl = qs.parse(params);
-
-  currentUrl[key] = value;
-
-  return qs.stringifyUrl(
-    {
-      url: window.location.pathname,
-      query: currentUrl,
-    },
-    { skipNull: true }
-  );
+export function formatEventDate(iso: string, locale: Locale = "en") {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const tag = locale === "fa" ? "fa-IR" : "en-GB";
+  const date = d.toLocaleDateString(tag, { weekday: "short", day: "numeric", month: "short" });
+  const time = d.toLocaleTimeString(tag, { hour: "2-digit", minute: "2-digit", hour12: false });
+  return `${date} · ${time}`;
 }
 
-export function removeKeysFromQuery({
-  params,
-  keysToRemove,
-}: RemoveUrlQueryParams) {
-  const currentUrl = qs.parse(params);
-
-  keysToRemove.forEach((key) => {
-    delete currentUrl[key];
-  });
-
-  return qs.stringifyUrl(
-    {
-      url: window.location.pathname,
-      query: currentUrl,
-    },
-    { skipNull: true }
-  );
+export function formatLongDate(iso: string, locale: Locale = "en") {
+  return new Date(iso).toLocaleDateString(locale === "fa" ? "fa-IR" : "en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 }
 
-export const handleError = (error: unknown) => {
-  console.error(error);
-  throw new Error(typeof error === "string" ? error : JSON.stringify(error));
+export function formatPrice(price: string | number, isFree = false, locale: Locale = "en") {
+  const n = Number(price);
+  if (isFree || !n) return locale === "fa" ? "رایگان" : "Free";
+  if (locale === "fa") return `${n.toLocaleString("fa-IR")} دلار`;
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
+}
+
+/** Value for <input type="datetime-local"> from an ISO string (local time). */
+export function toLocalInput(iso: string) {
+  const d = new Date(iso);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+export const handleError = (error: unknown): never => {
+  const message = typeof error === "string" ? error : error instanceof Error ? error.message : "Something went wrong.";
+  throw new Error(message);
 };
