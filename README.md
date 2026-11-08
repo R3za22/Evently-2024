@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Evently (2024)
 
-## Getting Started
+An event-platform starter: landing page, header with sign-in state, mobile navigation, and the data layer for events, categories, users and orders.
 
-First, run the development server:
+> **Course project (unfinished).** Built in 2024 while following the "Evently" tutorial from JavaScript Mastery. The design, folder structure and the server actions and models under `lib/` come from the tutorial. This repo stops early: only the home page and the authentication shell are implemented; "Create Event" and "My Profile" are placeholders.
 
-```bash
+**Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui (Radix), Clerk (auth), MongoDB + Mongoose, Stripe, UploadThing.
+
+## Run the real app
+
+Needs your own Clerk, MongoDB, Stripe and UploadThing keys in `.env.local` (not included).
+
+```sh
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Static demo
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```sh
+npm run build:demo   # writes dist-demo/ for /demos/evently/
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+What the demo is and is not:
 
-## Learn More
+- It is a static export of the pages that exist: home, sign-in/sign-up, and the two placeholder pages.
+- Clerk is replaced by a stub (`demo/stubs/clerk.tsx`): the visitor is a pre-signed-in demo user and the sign-in pages say sign-in is disabled.
+- The events list on the home page uses six fixture events (`demo/fixtures/events.json`) with generated SVG covers. The real app had no events list yet.
+- MongoDB, Stripe and UploadThing code is not part of the demo bundle; no request leaves the demo origin.
+- `app/api` and `middleware.ts` are moved aside during the build (a static export cannot include them) and restored afterwards.
+- A dismissible banner is added to every page.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Assets: icons and images are the tutorial's starter files; fixture covers are generated for this repo.

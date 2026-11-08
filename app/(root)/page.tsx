@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import DemoEvents from "@/components/shared/DemoEvents";
 
 export default function Home() {
   return (
@@ -36,9 +37,13 @@ export default function Home() {
           Trusted by <br />
           Thousands of Events
         </h2>
-        <div className='flex w-full flex-col gap-5 md:flex-row'>
-          Search Category
-        </div>
+        {process.env.NEXT_PUBLIC_DEMO === "1" ? (
+          <DemoEvents />
+        ) : (
+          <div className='flex w-full flex-col gap-5 md:flex-row'>
+            Search Category
+          </div>
+        )}
       </section>
     </>
   );
