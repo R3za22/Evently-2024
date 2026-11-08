@@ -1,10 +1,16 @@
-import { SignUp } from "@clerk/nextjs";
+import { Suspense } from "react";
+import { AuthPanel } from "@/lib/auth";
+
+export const metadata = { title: "Create account" };
 
 export default function Page() {
-  return <SignUp path='/sign-up' />;
+  return (
+    <Suspense>
+      <AuthPanel mode="sign-up" />
+    </Suspense>
+  );
 }
 
-// Needed for the static demo export (optional catch-all with no extra segments).
 export function generateStaticParams() {
   return [{ "sign-up": [] }];
 }

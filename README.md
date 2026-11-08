@@ -1,33 +1,29 @@
-# Evently (2024)
+# Evently
 
-An event-platform starter: landing page, header with sign-in state, mobile navigation, and the data layer for events, categories, users and orders.
+An event platform: discover events (search, category filter, pagination), event pages with related events, create/edit events with an image upload, ticket checkout, "My tickets" (attending and organised), an organiser orders dashboard, sign-in, and a Persian/RTL home page.
 
-> **Course project (unfinished).** Built in 2024 while following the "Evently" tutorial from JavaScript Mastery. The design, folder structure and the server actions and models under `lib/` come from the tutorial. This repo stops early: only the home page and the authentication shell are implemented; "Create Event" and "My Profile" are placeholders.
+> Based on the JSM (JavaScript Mastery) Evently tutorial. The data model and the original server actions come from the tutorial; the redesign ("Box Office"), the mock data layer, the security fixes, validation, tests and e2e flows are my own work.
 
-**Stack:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui (Radix), Clerk (auth), MongoDB + Mongoose, Stripe, UploadThing.
+**Stack:** Next.js 14.2 (App Router), TypeScript, Tailwind, Clerk, MongoDB/Mongoose, Stripe, uploadthing, zod, Vitest, Playwright.
 
-## Run the real app
+## Run modes
 
-Needs your own Clerk, MongoDB, Stripe and UploadThing keys in `.env.local` (not included).
+| Mode | How | Needs |
+|---|---|---|
+| Mock (default for demo/tests) | `npm run dev:mock` | nothing: seeded events, categories and orders in localStorage, a mock sign-in, simulated Stripe, mocked upload |
+| Live | `npm run dev` | `.env.local` from `.env.example` (Clerk, MongoDB, Stripe, uploadthing) |
+| Static demo | `npm run build:demo` -> `dist-demo/` (base path `/demos/evently/`) | nothing |
 
-```sh
-npm install
-npm run dev
-```
+`NEXT_PUBLIC_API_MODE=mock` selects the mock adapter (`lib/api/mock`) and mock auth (`lib/auth/mock.tsx`); otherwise the live adapter wraps the server actions in `lib/actions`. Simulated payments: card `4242 4242 4242 4242` succeeds, `4000 0000 0000 0002` is declined. "Reset demo data" is on the About & privacy page.
 
-## Static demo
+## Security fixes (server actions)
 
-```sh
-npm run build:demo   # writes dist-demo/ for /demos/evently/
-```
+- The acting user comes from the Clerk session (`lib/server/session.ts`), never from client input; update/delete/orders check ownership.
+- Checkout reads the price from the database; the client only names the event.
+- Search and category regexes are escaped; ids and inputs are validated with zod.
+- `clerkMiddleware` protects `/events/create`, `/events/edit`, `/tickets`, `/orders`, `/checkout`.
+- `/api/webhook/stripe` verifies the Stripe signature on the raw body; the Clerk webhook uses the raw body too. User/order write helpers are no longer callable as server actions.
 
-What the demo is and is not:
+## Scripts
 
-- It is a static export of the pages that exist: home, sign-in/sign-up, and the two placeholder pages.
-- Clerk is replaced by a stub (`demo/stubs/clerk.tsx`): the visitor is a pre-signed-in demo user and the sign-in pages say sign-in is disabled.
-- The events list on the home page uses six fixture events (`demo/fixtures/events.json`) with generated SVG covers. The real app had no events list yet.
-- MongoDB, Stripe and UploadThing code is not part of the demo bundle; no request leaves the demo origin.
-- `app/api` and `middleware.ts` are moved aside during the build (a static export cannot include them) and restored afterwards.
-- A dismissible banner is added to every page.
-
-Assets: icons and images are the tutorial's starter files; fixture covers are generated for this repo.
+`npm test` (unit), `npm run test:e2e` (Playwright, mock mode), `npm run lint`, `npm run typecheck`, `npm run build`, `npm run build:demo`.

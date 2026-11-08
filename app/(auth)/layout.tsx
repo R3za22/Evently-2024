@@ -1,16 +1,12 @@
+import Footer from "@/components/shared/Footer";
 import Header from "@/components/shared/Header";
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Header />
-      <div className='flex-center min-h-screen w-full bg-primary-50 bg-dotted-pattern bg-cover bg-fixed bg-center'>
-        {children}
-      </div>
-    </>
+      <main id="main" className="flex flex-1 items-center justify-center px-5 py-12">{children}</main>
+      <Footer />
+    </div>
   );
 }

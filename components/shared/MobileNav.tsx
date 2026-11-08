@@ -1,44 +1,26 @@
-import React from "react";
+"use client";
+import Link from "next/link";
+import { Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { navLinks } from "./Header";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
-
-import Image from "next/image";
-import Navitems from "./Navitems";
-
-const MobileNav = () => {
+export default function MobileNav() {
   return (
-    <nav className='md:hidden'>
+    <div className="md:hidden">
       <Sheet>
-        <SheetTrigger className='align-middle'>
-          <Image
-            src={"/assets/icons/menu.svg"}
-            alt='menu'
-            width={24}
-            height={24}
-            className='cursor-pointer'
-          />
+        <SheetTrigger className="flex h-11 w-11 items-center justify-center rounded-btn text-white" aria-label="Open menu">
+          <Menu aria-hidden="true" />
         </SheetTrigger>
-        <SheetContent className='flex flex-col gap-6 bg-white md:hidden'>
-          <Image
-            src='/assets/images/logo.svg'
-            alt='logo'
-            height={38}
-            width={128}
-          />
-          <Separator className='border border-gray-50' />
-          <Navitems />
+        <SheetContent className="flex flex-col gap-4 bg-paper">
+          <SheetTitle className="font-display text-2xl font-extrabold">Evently</SheetTitle>
+          <SheetDescription className="sr-only">Site navigation</SheetDescription>
+          <nav aria-label="Mobile" className="flex flex-col gap-1">
+            {[...navLinks, { label: "فارسی", route: "/fa" }].map((l) => (
+              <Link key={l.route} href={l.route} className="rounded-btn px-3 py-3 text-lg font-bold text-ink no-underline hover:bg-indigo-tint">{l.label}</Link>
+            ))}
+          </nav>
         </SheetContent>
       </Sheet>
-    </nav>
+    </div>
   );
-};
-
-export default MobileNav;
+}

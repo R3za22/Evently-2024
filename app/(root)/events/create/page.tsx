@@ -1,8 +1,12 @@
-export default function Page() {
+"use client";
+
+import EventForm from "@/components/shared/EventForm";
+import { RequireAuth } from "@/lib/auth";
+
+export default function CreateEventPage() {
   return (
-    <section className='wrapper my-16 text-center'>
-      <h1 className='h2-bold'>Create Event</h1>
-      <p className='p-regular-20 mt-4'>This screen was not built yet: the project stops after the home page and authentication setup.</p>
-    </section>
+    <RequireAuth>
+      <EventForm mode="create" />
+    </RequireAuth>
   );
 }

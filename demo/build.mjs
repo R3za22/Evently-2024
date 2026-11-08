@@ -14,7 +14,7 @@ try {
   fs.rmSync(".next", { recursive: true, force: true });
   const r = spawnSync(process.execPath, ["node_modules/next/dist/bin/next", "build"], {
     stdio: "inherit",
-    env: { ...process.env, NEXT_PUBLIC_DEMO: "1", NEXT_TELEMETRY_DISABLED: "1" },
+    env: { ...process.env, NEXT_PUBLIC_DEMO: "1", NEXT_PUBLIC_API_MODE: "mock", NEXT_TELEMETRY_DISABLED: "1" },
   });
   if (r.status !== 0) throw new Error("next build failed");
 } finally {
@@ -28,7 +28,7 @@ const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e
 for (const f of walk("dist-demo")) {
   if (f.endsWith(".html")) {
     let s = fs.readFileSync(f, "utf8");
-    s = s.replace(/(href|src)="\/(assets|demo)\//g, `$1="${BP}/$2/`);
+    s = s.replace(/(href|src)="\/(events|logo\.svg)/g, `$1="${BP}/$2`);
     s = s.replace("</body>", `<script src="${BP}/demo-banner.js"></script></body>`);
     fs.writeFileSync(f, s);
   } else if (f.endsWith(".css")) {

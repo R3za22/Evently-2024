@@ -1,276 +1,56 @@
+@import "@fontsource/dm-sans/latin-400.css";
+@import "@fontsource/dm-sans/latin-500.css";
+@import "@fontsource/dm-sans/latin-700.css";
+@import "@fontsource/bricolage-grotesque/latin-700.css";
+@import "@fontsource/bricolage-grotesque/latin-800.css";
+@import "@fontsource/vazirmatn/arabic-400.css";
+@import "@fontsource/vazirmatn/arabic-500.css";
+@import "@fontsource/vazirmatn/arabic-700.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --background: 48 17% 95%;
+    --foreground: 247 40% 12%;
+    --secondary: 247 70% 95%;
+    --secondary-foreground: 247 40% 12%;
+    --muted: 48 17% 92%;
+    --muted-foreground: 247 15% 39%;
+    --border: 45 14% 83%;
+    --ring: 245 74% 56%;
   }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-paper font-sans text-ink antialiased; font-size: 16px; line-height: 1.5; }
+  [dir="rtl"], [lang="fa"] { font-family: "Vazirmatn", "DM Sans", system-ui, sans-serif; line-height: 1.8; }
+  h1, h2, h3 { @apply font-display; }
+  :focus-visible { outline: 3px solid #4B3FE0; outline-offset: 2px; }
+  a { color: #4B3FE0; }
+  a:hover { color: #3A2FC0; }
+  @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 }
 
-* {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: var(--font-poppins);
-}
-
-.filter-grey {
-  filter: brightness(0) saturate(100%) invert(47%) sepia(0%) saturate(217%)
-    hue-rotate(32deg) brightness(98%) contrast(92%);
-}
-
-/* ========================================== TAILWIND STYLES */
-@layer utilities {
-  .wrapper {
-    @apply max-w-7xl lg:mx-auto p-5 md:px-10 xl:px-0 w-full;
-  }
-
-  .flex-center {
-    @apply flex justify-center items-center;
-  }
-
-  .flex-between {
-    @apply flex justify-between items-center;
-  }
-
-  /* TYPOGRAPHY */
-  /* 64 */
-  .h1-bold {
-    @apply font-bold text-[40px] leading-[48px] lg:text-[48px] lg:leading-[60px]  xl:text-[58px] xl:leading-[74px];
-  }
-
-  /* 40 */
-  .h2-bold {
-    @apply font-bold text-[32px] leading-[40px] lg:text-[36px] lg:leading-[44px] xl:text-[40px] xl:leading-[48px];
-  }
-
-  .h2-medium {
-    @apply font-medium text-[32px] leading-[40px] lg:text-[36px] lg:leading-[44px] xl:text-[40px] xl:leading-[48px];
-  }
-
-  /* 36 */
-  .h3-bold {
-    @apply font-bold text-[28px] leading-[36px] md:text-[36px] md:leading-[44px];
-  }
-
-  .h3-medium {
-    @apply font-medium text-[28px] leading-[36px] md:text-[36px] md:leading-[44px];
-  }
-
-  /* 32 */
-  .h4-medium {
-    @apply font-medium text-[32px] leading-[40px];
-  }
-
-  /* 28 */
-  .h5-bold {
-    @apply font-bold text-[28px] leading-[36px];
-  }
-
-  /* 24 */
-  .p-bold-24 {
-    @apply font-bold text-[24px] leading-[36px];
-  }
-
-  .p-medium-24 {
-    @apply font-medium text-[24px] leading-[36px];
-  }
-
-  .p-regular-24 {
-    @apply font-normal text-[24px] leading-[36px];
-  }
-
-  /* 20 */
-  .p-bold-20 {
-    @apply font-bold text-[20px] leading-[30px] tracking-[2%];
-  }
-
-  .p-semibold-20 {
-    @apply text-[20px] font-semibold leading-[30px] tracking-[2%];
-  }
-
-  .p-medium-20 {
-    @apply text-[20px] font-medium leading-[30px];
-  }
-
-  .p-regular-20 {
-    @apply text-[20px] font-normal leading-[30px] tracking-[2%];
-  }
-
-  /* 18 */
-  .p-semibold-18 {
-    @apply text-[18px] font-semibold leading-[28px] tracking-[2%];
-  }
-
-  .p-medium-18 {
-    @apply text-[18px] font-medium leading-[28px];
-  }
-
-  .p-regular-18 {
-    @apply text-[18px] font-normal leading-[28px] tracking-[2%];
-  }
-
-  /* 16 */
-  .p-bold-16 {
-    @apply text-[16px] font-bold leading-[24px];
-  }
-
-  .p-medium-16 {
-    @apply text-[16px] font-medium leading-[24px];
-  }
-
-  .p-regular-16 {
-    @apply text-[16px] font-normal leading-[24px];
-  }
-
-  /* 14 */
-  .p-semibold-14 {
-    @apply text-[14px] font-semibold leading-[20px];
-  }
-
-  .p-medium-14 {
-    @apply text-[14px] font-medium leading-[20px];
-  }
-
-  .p-regular-14 {
-    @apply text-[14px] font-normal leading-[20px];
-  }
-
-  /* 12 */
-  .p-medium-12 {
-    @apply text-[12px] font-medium leading-[20px];
-  }
-
-  /* SHADCN OVERRIDES */
-  .select-field {
-    @apply w-full bg-grey-50 h-[54px] placeholder:text-grey-500 rounded-full p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent focus:ring-transparent !important;
-  }
-
-  .input-field {
-    @apply bg-grey-50 h-[54px] focus-visible:ring-offset-0 placeholder:text-grey-500 rounded-full p-regular-16 px-4 py-3 border-none focus-visible:ring-transparent !important;
-  }
-
-  .textarea {
-    @apply bg-grey-50 flex flex-1 placeholder:text-grey-500 p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent !important;
-  }
-
-  .button {
-    @apply rounded-full h-[54px] p-regular-16;
-  }
-
-  .select-item {
-    @apply py-3 cursor-pointer  focus:bg-primary-50;
-  }
-
-  .toggle-switch {
-    @apply bg-gray-300 !important;
-  }
-}
-
-/* ========================================== CLERK STYLES */
-.cl-logoImage {
-  height: 38px;
-}
-
-.cl-userButtonBox {
-  flex-direction: row-reverse;
-}
-
-.cl-userButtonOuterIdentifier {
-  font-size: 16px;
-}
-
-.cl-userButtonPopoverCard {
-  right: 4px !important;
-}
-
-.cl-formButtonPrimary:hover,
-.cl-formButtonPrimary:focus,
-.cl-formButtonPrimary:active {
-  background-color: #705cf7;
-}
-
-/* ========================================== REACT-DATEPICKER STYLES */
-.datePicker {
-  width: 100%;
-}
-
-.react-datepicker__input-container input {
-  background-color: transparent;
-  width: 100%;
-  outline: none;
-  margin-left: 16px;
-}
-
-.react-datepicker__day--selected {
-  background-color: #624cf5 !important;
-  color: #ffffff !important;
-  border-radius: 4px;
-}
-
-.react-datepicker__time-list-item--selected {
-  background-color: #624cf5 !important;
+@layer components {
+  .wrapper { @apply mx-auto w-full max-w-[1280px] px-5 md:px-10 lg:px-20; }
+  .overline { @apply text-xs font-bold uppercase tracking-[1px] text-slate; }
+  .btn { @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-btn px-5 font-bold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-lg { @apply min-h-[52px] px-7; }
+  .btn-primary { @apply bg-indigo text-white hover:bg-indigo-dark hover:text-white; }
+  .btn-dark { @apply bg-ink text-white hover:bg-ink/90 hover:text-white; }
+  .btn-amber { @apply bg-marquee text-ink hover:brightness-95 hover:text-ink; }
+  .btn-outline { @apply border-2 border-ink bg-transparent text-ink hover:bg-ink hover:text-white; }
+  .btn-danger { @apply bg-error text-white hover:brightness-95 hover:text-white; }
+  .chip { @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold; }
+  .field { @apply flex flex-col gap-1.5; }
+  .field label { @apply text-sm font-bold; }
+  .field input, .field select, .field textarea, .input { @apply min-h-[48px] w-full rounded-field border-[1.5px] border-[#8C899E] bg-white px-4 py-2 text-base text-ink placeholder:text-slate/70; }
+  .field textarea { @apply min-h-[120px]; }
+  .field [aria-invalid="true"] { @apply border-error; }
+  .field .hint { @apply text-sm text-error; }
+  .card { @apply overflow-hidden rounded-card border border-line bg-white; }
+  .perforation { border-left: 3px dashed #F5F4F0; }
+  .skeleton { @apply relative overflow-hidden rounded-field bg-line/60; }
+  .skeleton::after { content: ""; @apply absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/60 to-transparent; animation: shimmer 1.4s infinite; }
 }

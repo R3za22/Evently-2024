@@ -1,7 +1,14 @@
-import { SignIn } from "@clerk/nextjs";
+import { Suspense } from "react";
+import { AuthPanel } from "@/lib/auth";
+
+export const metadata = { title: "Sign in" };
 
 export default function Page() {
-  return <SignIn path='/sign-in' />;
+  return (
+    <Suspense>
+      <AuthPanel mode="sign-in" />
+    </Suspense>
+  );
 }
 
 // Needed for the static demo export (optional catch-all with no extra segments).
